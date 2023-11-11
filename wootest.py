@@ -7,19 +7,9 @@ import time, random
 from faker import Faker
 
 
-
-def selenium_test():
-	#driver = webdriver.Chrome('./chromedriver')
-	options = Options()
-	options.headless = True
-	options.add_argument('--headless')
-	options.add_argument('--disable-gpu')  # Last I checked this was necessary.
-	options.add_argument('window-size=4086x4086')
-	driver = webdriver.Chrome(options=options)
-	driver.maximize_window()
+def test_shop_page(driver):
 	driver.get("https://loadtest.mystagingwebsite.com/shop-2/")
 	print(driver.title)
-
 	elements = driver.find_elements(By.CSS_SELECTOR, "a[class='button product_type_simple add_to_cart_button ajax_add_to_cart']")
 	print(elements)
 	time.sleep(2)
@@ -28,7 +18,7 @@ def selenium_test():
 	timeout = random.randint(5, 10)
 	time.sleep(timeout)
 
-	#checkout page
+def test_checkout_page(driver):
 	driver.get("https://loadtest.mystagingwebsite.com/checkout-2/")
 	print(driver.title)
 
@@ -60,6 +50,29 @@ def selenium_test():
 
 	timeout = random.randint(2, 5)
 	time.sleep(timeout)
+
+def selenium_test():
+	#driver = webdriver.Chrome('./chromedriver')
+	options = Options()
+	options.headless = True
+	options.add_argument('--headless')
+	options.add_argument('--disable-gpu')  # Last I checked this was necessary.
+	options.add_argument('window-size=4086x4086')
+	driver = webdriver.Chrome(options=options)
+	driver.maximize_window()
+
+	try:
+		test_shop_page(driver)
+	except Exception as e:
+		test_shop_page(driver)
+
+	#checkout page
+	try:
+		test_checout_page(driver)
+	except Exception as e:
+		test_checkout_page(driver)
+
+	
 	print(driver.current_url)
 	driver.close()
 
