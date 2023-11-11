@@ -5,22 +5,41 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 import time, random
 from faker import Faker
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def test_shop_page(driver):
 	driver.get("https://loadtest.mystagingwebsite.com/shop-2/")
 	print(driver.title)
-	elements = driver.find_elements(By.CSS_SELECTOR, "a[class='button product_type_simple add_to_cart_button ajax_add_to_cart']")
-	print(elements)
-	time.sleep(2)
-	choice = random.randint(1, 3)
-	elements[choice].click()
-	timeout = random.randint(5, 10)
+	timeout = random.randint(2, 5)
 	time.sleep(timeout)
 
+	#wait = WebDriverWait(driver, 10)
+	elements = driver.find_elements(By.CSS_SELECTOR, "a[class='button product_type_simple add_to_cart_button ajax_add_to_cart']")
+	print(elements)
+	print(len(elements))
+	
+	timeout = random.randint(2, 5)
+	time.sleep(timeout)
+	choice = random.randint(1, 3)
+	elements[choice].click()
+
+	timeout = random.randint(5, 10)
+	#time.sleep(timeout)
+	
+
 def test_checkout_page(driver):
-	driver.get("https://loadtest.mystagingwebsite.com/checkout-2/")
-	print(driver.title)
+	destination_url = "https://loadtest.mystagingwebsite.com/checkout-2/"
+	loop = True
+	while (loop):
+		driver.get(destination_url)
+		if driver.current_url == destination_url:
+			loop = False
+		print(driver.current_url)
+
+	timeout = random.randint(2, 5)
+	time.sleep(timeout)
 
 	faker = Faker()
 	first_name = driver.find_element(By.ID, 'billing_first_name')
